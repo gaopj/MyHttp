@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<url>
+        <Node
+            Key = "getWeatherInfo"
+            Expires = "300"
+            NetType = "GET"
+            Url = "http://www.weather.com.cn/data/sk/101010100.html" />
+</url>
