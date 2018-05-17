@@ -11,6 +11,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -21,10 +23,19 @@ import static android.content.ContentValues.TAG;
 public class UrlConfigManager {
     public static final String TAG = "httplib";
 
+    private static Map<String ,URLData > mUrlList;
+
     public static URLData findURL(String key, Context context){
         URLData data = null;
+        if(mUrlList ==null || mUrlList.isEmpty()) {
+            fetchUrlDataFromXml(context);
+        }
 
-        context.getResources();
+        data = mUrlList.get(key);
+        return  data;
+    }
+
+    private static void fetchUrlDataFromXml(Context context){
         XmlResourceParser xrp = context.getResources().getXml(R.xml.url);
 
         try {
@@ -38,20 +49,13 @@ public class UrlConfigManager {
                         //一般都是获取标签的属性值，所以在这里数据你需要的数据
                         Log.d(TAG,"当前标签是："+xrp.getName());
                         if (xrp.getName().equals(URLData.NODE)){
-                            if(key.equals(xrp.getAttributeValue(null,URLData.KEY))){
-                                data  = new URLData();
-                                data.key = key;
+                            URLData data = new URLData();
+                                data.key = xrp.getAttributeValue(null,URLData.KEY);
                                 int expires = Integer.parseInt(xrp.getAttributeValue(null,URLData.EXPIRES));
                                 data.expires = expires;
                                 data.netType = xrp.getAttributeValue(null,URLData.NET_TYPE);
                                 data.url = xrp.getAttributeValue(null,URLData.URL);
-                            }
-                            //两种方法获取属性值
-                            Log.d(TAG,"第一个属性：" + xrp.getAttributeName(0)
-                                    + ": " + xrp.getAttributeValue(0));
-                            Log.d(TAG,"第二个属性：" + xrp.getAttributeName(1)+": "
-                                    + xrp.getAttributeValue(null,"att2"));
-
+                            mUrlList.put(data.key,data);
                         }
                         break;
                     case XmlPullParser.TEXT:
@@ -68,7 +72,5 @@ public class UrlConfigManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return  data;
     }
 }
