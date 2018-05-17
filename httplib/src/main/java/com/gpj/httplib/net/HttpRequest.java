@@ -100,7 +100,7 @@ public class HttpRequest implements Runnable {
             response.setError(false);
             response.setResult(strResponse);
         }
-        if(mHandler!=null && !isCancel) {
+        if(mHandler!=null && !isCancel && mCallback!=null) {
             mHandler.get().post(new Runnable() {
                 @Override
                 public void run() {
