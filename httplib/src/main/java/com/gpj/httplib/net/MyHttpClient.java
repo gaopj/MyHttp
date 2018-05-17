@@ -2,7 +2,6 @@ package com.gpj.httplib.net;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.v4.app.NavUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,29 +11,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.LogRecord;
 
 /**
  * Created by v-pigao on 5/15/2018.
  */
 
-public class RequestManager {
+public class MyHttpClient {
     private Handler mHandler;
     private Context appContext;
 
-    private RequestManager(){};
+    CacheManager mCacheManager;
+
+    private MyHttpClient(){};
 
     private static class RequestManagerHolder{
-        private static final RequestManager INSTANCE = new RequestManager();
+        private static final MyHttpClient INSTANCE = new MyHttpClient();
     }
-    public static final RequestManager getInstance(){
-        return RequestManager.RequestManagerHolder.INSTANCE;
+    public static final MyHttpClient getInstance(){
+        return MyHttpClient.RequestManagerHolder.INSTANCE;
     }
 
-    public static final RequestManager getInstance(Context context){
-        RequestManager requestManager = RequestManager.RequestManagerHolder.INSTANCE;
-        requestManager.init(context);
-        return requestManager;
+    public static final MyHttpClient getInstance(Context context){
+        MyHttpClient myHttpClient = MyHttpClient.RequestManagerHolder.INSTANCE;
+        myHttpClient.init(context);
+        return myHttpClient;
     }
 
     private ExecutorService executorService;
@@ -69,14 +69,22 @@ public class RequestManager {
     }
 
     public void invoke(HttpRequest request){
+        if(request==null)
+            return;
         requestList.add(request);
         executorService().execute(request);
     }
 
     public void init(Context context){
-        if(appContext==null||mHandler== null) {
+        if(appContext==null) {
             appContext = context.getApplicationContext();
+
+        }
+        if(mHandler ==null){
             mHandler = new Handler(context.getMainLooper());
+        }
+        if(mCacheManager==null){
+            mCacheManager = new CacheManager();
         }
     }
 }

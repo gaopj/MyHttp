@@ -4,31 +4,31 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.gpj.httplib.net.RequestManager;
+import com.gpj.httplib.net.MyHttpClient;
 
 /**
  * Created by v-pigao on 5/16/2018.
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-    protected RequestManager requestManager;
+    protected MyHttpClient myHttpClient;
 
 
-    public RequestManager getRequestManager(){
-        return requestManager;
+    public MyHttpClient getMyHttpClient(){
+        return myHttpClient;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestManager = RequestManager.getInstance(this);
+        myHttpClient = MyHttpClient.getInstance(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(requestManager!=null){
-            requestManager.cancelAllRequest();
+        if(myHttpClient !=null){
+            myHttpClient.cancelAllRequest();
         }
     }
 }

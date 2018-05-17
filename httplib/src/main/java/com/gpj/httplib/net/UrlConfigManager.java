@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class UrlConfigManager {
     public static URLData findURL(String key, Context context){
         URLData data = null;
         if(mUrlList ==null || mUrlList.isEmpty()) {
+            mUrlList = new HashMap<>();
             fetchUrlDataFromXml(context);
         }
 
@@ -43,11 +45,9 @@ public class UrlConfigManager {
             while (event != XmlPullParser.END_DOCUMENT){    //如果还没到文档的结束标志，那么就继续往下处理
                 switch (event){
                     case XmlPullParser.START_DOCUMENT:
-                        Log.i(TAG,"xml解析开始");
                         break;
                     case XmlPullParser.START_TAG:
                         //一般都是获取标签的属性值，所以在这里数据你需要的数据
-                        Log.d(TAG,"当前标签是："+xrp.getName());
                         if (xrp.getName().equals(URLData.NODE)){
                             URLData data = new URLData();
                                 data.key = xrp.getAttributeValue(null,URLData.KEY);
