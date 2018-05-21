@@ -20,7 +20,8 @@ public class MyHttpClient {
     private Handler mHandler;
     private Context appContext;
 
-    CacheManager mCacheManager;
+     CacheManager mCacheManager;
+     CookieManager mCookieManager;
 
     private MyHttpClient(){};
 
@@ -85,6 +86,9 @@ public class MyHttpClient {
         }
         if(mCacheManager==null){
             mCacheManager = new CacheManager();
+        }
+        if(mCookieManager ==null){
+            mCookieManager = new CookieManager();
         }
     }
 }

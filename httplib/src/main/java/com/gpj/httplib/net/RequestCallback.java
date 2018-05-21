@@ -6,5 +6,5 @@ package com.gpj.httplib.net;
 
 public interface RequestCallback {
     void onSuccess(String content);
-    void onFail(String content);
+    void onFail(String errorMessage);
 }

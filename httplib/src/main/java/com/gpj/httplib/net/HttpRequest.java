@@ -26,6 +26,7 @@ public class HttpRequest implements Runnable {
     private RequestCallback mCallback;
     private WeakReference<Handler> mHandler;
     private CacheManager mCacheManager;
+    private CookieManager mCookieManager;
     private Response response;
 
     private volatile boolean isCancel = false;
@@ -36,12 +37,13 @@ public class HttpRequest implements Runnable {
         mCallback = callback;
         mHandler = new WeakReference<>(handler);
         mCacheManager = MyHttpClient.getInstance().mCacheManager;
+        mCookieManager = MyHttpClient.getInstance().mCookieManager;
     }
 
     @Override
     public void run() {
         response = null;
-        if (mUrlData.netType.equals("GET")) {
+        if (mUrlData.netType.toUpperCase().equals("GET")) {
            CacheManager.CacheBean bean= mCacheManager.getStringFromMemory(mUrlData.url);
            if(bean!=null&& mUrlData.expires>0  && System.currentTimeMillis()<=bean.time ){
                response = new Response();
@@ -76,6 +78,7 @@ public class HttpRequest implements Runnable {
     }
 
     private Response netRequest() {
+
         Response response = new Response();
         HttpURLConnection connection = null;
         String strResponse = null;
@@ -87,10 +90,12 @@ public class HttpRequest implements Runnable {
             connection.setConnectTimeout(8000);
             connection.setReadTimeout(8000);
 
+            // 设置Cookie
+            mCookieManager.setCookies(connection);
             // 设置请求方式，GET或POST
             connection.setRequestMethod(mUrlData.netType);
 
-            if (mParams != null && mUrlData.netType.equals("POST")) {
+            if (mParams != null && mUrlData.netType.toUpperCase().equals("POST")) {
                 DataOutputStream data = new DataOutputStream(connection.getOutputStream());
                 StringBuilder sb = new StringBuilder();
                 Iterator<Map.Entry<String, String>> iterable = mParams.entrySet().iterator();
@@ -107,6 +112,9 @@ public class HttpRequest implements Runnable {
 
             //连接
             connection.connect();
+
+            // 存储Cookies
+            mCookieManager.storeCookies(connection);
 
             //得到响应码
             int responseCode = connection.getResponseCode();

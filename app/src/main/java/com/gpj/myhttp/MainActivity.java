@@ -46,8 +46,8 @@ public class MainActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFail(String content) {
-                        textView2.setText(content);
+                    public void onFail(String errorMessage) {
+                        textView2.setText(errorMessage);
                     }
                 });
             }
