@@ -21,7 +21,7 @@ import static android.content.ContentValues.TAG;
  * Created by v-pigao on 5/15/2018.
  */
 
-public class UrlConfigManager {
+ class UrlConfigManager {
     public static final String TAG = "httplib";
 
     private static Map<String ,URLData > mUrlList;

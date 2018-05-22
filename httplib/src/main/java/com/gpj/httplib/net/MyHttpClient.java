@@ -17,19 +17,18 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class MyHttpClient {
-    private Handler mHandler;
-    private Context appContext;
+    private Handler mHandler; // 持有主线程Lopper，用于回调
+    private static Context appContext; // application的 Context
+    private List<HttpRequest> requestList = new LinkedList<>(); // 持有的所有请求队列
+    private ExecutorService executorService; // 用于网络请求的线程池
+    CacheManager mCacheManager; // 缓存管理
+    CookieManager mCookieManager; // Cookie管理
 
-     CacheManager mCacheManager;
-     CookieManager mCookieManager;
 
     private MyHttpClient(){};
 
     private static class RequestManagerHolder{
         private static final MyHttpClient INSTANCE = new MyHttpClient();
-    }
-    public static final MyHttpClient getInstance(){
-        return MyHttpClient.RequestManagerHolder.INSTANCE;
     }
 
     public static final MyHttpClient getInstance(Context context){
@@ -38,7 +37,7 @@ public class MyHttpClient {
         return myHttpClient;
     }
 
-    private ExecutorService executorService;
+
 
     private synchronized ExecutorService executorService() {
         if (executorService == null) {
@@ -48,8 +47,10 @@ public class MyHttpClient {
         return executorService;
     }
 
-    private List<HttpRequest> requestList = new LinkedList<>();
 
+    /**
+     * 取消所有请求
+     */
     public void cancelAllRequest(){
         if(requestList!=null&& requestList.size()>0){
             for(HttpRequest request:requestList){
@@ -57,6 +58,30 @@ public class MyHttpClient {
             }
             requestList.clear();
         }
+    }
+
+    /**
+     * get 请求
+     * @param urlKey url.xml配置中的Key
+     * @param callback 请求回调函数，在主线程中执行
+     */
+    public void invokeGet(String urlKey, RequestCallback callback){
+        URLData data=UrlConfigManager.findURL(urlKey,appContext);
+        data.netType = "GET";
+        invoke(data, null,  callback);
+    }
+
+
+    /**
+     * post 请求
+     * @param urlKey url.xml配置中的Key
+     * @param params post 请求需要传入的参数
+     * @param callback 请求回调函数，在主线程中执行
+     */
+    public void invokePost(String urlKey,HashMap<String,String> params, RequestCallback callback){
+        URLData data=UrlConfigManager.findURL(urlKey,appContext);
+        data.netType = "POST";
+        invoke(data, params,  callback);
     }
 
     public void invoke(String urlKey,HashMap<String,String> params, RequestCallback callback){
@@ -92,3 +117,4 @@ public class MyHttpClient {
         }
     }
 }
+

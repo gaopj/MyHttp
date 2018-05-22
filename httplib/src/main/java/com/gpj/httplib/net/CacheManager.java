@@ -9,7 +9,7 @@ import android.util.LruCache;
  * Created by v-pigao on 5/17/2018.
  */
 
-public class CacheManager  {
+ class CacheManager  {
     public static final String TAG = "httplib";
     private LruCache<String,CacheBean> mLruCache ;
 

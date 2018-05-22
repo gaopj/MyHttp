@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity {
         textView2 = findViewById(R.id.text2);
         refresh = findViewById(R.id.refresh);
 
-        getMyHttpClient().invoke("getWeatherInfo", null, new RequestCallback() {
+        getMyHttpClient().invokeGet("getWeatherInfo",  new RequestCallback() {
             @Override
             public void onSuccess(String content) {
                 textView.setText(content);

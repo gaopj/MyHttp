@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by v-pigao on 5/21/2018.
  */
 
-public class CookieManager {
+ class CookieManager {
     public static final String TAG = "httplib";
 
     private Map<String, Map<String, Map<String, String>>> store = new ConcurrentHashMap<>();;
