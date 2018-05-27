@@ -15,4 +15,4 @@
 
 ⑤ 调用getMyHttpClient()方法获得MyHttpClient.class类。通过该类的public void invokeGet(String urlKey, RequestCallback callback) 方法调用http请求，其中urlKey需要传入的是第②步中配置里的Key，callback是第④步中的RequestCallback对象。
 
-关于框架实现细节请参见：  [网络框架代码](https://github.com/gaopj/MyHttp)
+关于框架实现细节请参见：  [HttpURLConnection简易框架](https://www.jianshu.com/p/3dcce3b5cef2)
