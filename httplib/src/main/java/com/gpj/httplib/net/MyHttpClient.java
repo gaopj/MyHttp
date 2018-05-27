@@ -31,6 +31,11 @@ public class MyHttpClient {
         private static final MyHttpClient INSTANCE = new MyHttpClient();
     }
 
+    static final MyHttpClient getInstance(){
+        MyHttpClient myHttpClient = MyHttpClient.RequestManagerHolder.INSTANCE;
+        return myHttpClient;
+    }
+
     public static final MyHttpClient getInstance(Context context){
         MyHttpClient myHttpClient = MyHttpClient.RequestManagerHolder.INSTANCE;
         myHttpClient.init(context);
@@ -104,7 +109,6 @@ public class MyHttpClient {
     public void init(Context context){
         if(appContext==null) {
             appContext = context.getApplicationContext();
-
         }
         if(mHandler ==null){
             mHandler = new Handler(context.getMainLooper());
@@ -115,6 +119,7 @@ public class MyHttpClient {
         if(mCookieManager ==null){
             mCookieManager = new CookieManager();
         }
+        UrlConfigManager.init(context);
     }
 }
 

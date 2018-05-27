@@ -14,7 +14,6 @@ import android.util.LruCache;
     private LruCache<String,CacheBean> mLruCache ;
 
     public CacheManager(){
-
         // maxMemory 是允许的最大值 ，超过这个最大值，则会回收
         long maxMemory = Runtime.getRuntime().maxMemory()/8; // 获取最大的可用内存 一般使用可用内存的1 / 8
         mLruCache = new LruCache<>((int)maxMemory);

@@ -28,13 +28,17 @@ import static android.content.ContentValues.TAG;
 
     public static URLData findURL(String key, Context context){
         URLData data = null;
+        init(context);
+
+        data = mUrlList.get(key);
+        return  data;
+    }
+
+    public static void init(Context context){
         if(mUrlList ==null || mUrlList.isEmpty()) {
             mUrlList = new HashMap<>();
             fetchUrlDataFromXml(context);
         }
-
-        data = mUrlList.get(key);
-        return  data;
     }
 
     private static void fetchUrlDataFromXml(Context context){
